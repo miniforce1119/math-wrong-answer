@@ -1,314 +1,314 @@
 <!DOCTYPE html>
-     2	<html lang="ko">
-     3	<head>
-     4	    <meta charset="UTF-8">
-     5	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     6	    <title>복습하기 - 수학 오답 관리 시스템</title>
-     7	    <script src="https://cdn.tailwindcss.com"></script>
-     8	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-     9	    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    10	    <style>
-    11	        body {
-    12	            font-family: 'Noto Sans KR', sans-serif;
-    13	            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-    14	            min-height: 100vh;
-    15	        }
-    16	        .glass-card {
-    17	            background: rgba(255, 255, 255, 0.98);
-    18	            backdrop-filter: blur(20px);
-    19	            border: 1px solid rgba(203, 213, 225, 0.5);
-    20	            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    21	        }
-    22	        .glass-card-dark {
-    23	            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.95) 100%);
-    24	            backdrop-filter: blur(20px);
-    25	            border: 1px solid rgba(148, 163, 184, 0.2);
-    26	            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-    27	        }
-    28	        .hover-lift {
-    29	            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    30	        }
-    31	        .hover-lift:hover {
-    32	            transform: translateY(-4px);
-    33	            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
-    34	        }
-    35	        .gradient-text {
-    36	            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
-    37	            -webkit-background-clip: text;
-    38	            -webkit-text-fill-color: transparent;
-    39	            background-clip: text;
-    40	        }
-    41	        @keyframes fadeInUp {
-    42	            from {
-    43	                opacity: 0;
-    44	                transform: translateY(30px);
-    45	            }
-    46	            to {
-    47	                opacity: 1;
-    48	                transform: translateY(0);
-    49	            }
-    50	        }
-    51	        .animate-fade-in {
-    52	            animation: fadeInUp 0.8s ease-out;
-    53	        }
-    54	        .review-card {
-    55	            transition: all 0.3s;
-    56	        }
-    57	        .flip-card {
-    58	            perspective: 1000px;
-    59	        }
-    60	        .flip-card-inner {
-    61	            transition: transform 0.6s;
-    62	            transform-style: preserve-3d;
-    63	        }
-    64	        .flip-card.flipped .flip-card-inner {
-    65	            transform: rotateY(180deg);
-    66	        }
-    67	        .flip-card-front, .flip-card-back {
-    68	            backface-visibility: hidden;
-    69	        }
-    70	        .flip-card-back {
-    71	            transform: rotateY(180deg);
-    72	        }
-    73	    </style>
-    74	</head>
-    75	<body>
-    76	    <!-- Navigation -->
-    77	    <nav class="glass-card-dark text-white shadow-2xl sticky top-0 z-50">
-    78	        <div class="container mx-auto px-4">
-    79	            <div class="flex items-center justify-between py-4">
-    80	                <div class="flex items-center space-x-2">
-    81	                    <i class="fas fa-calculator text-2xl"></i>
-    82	                    <h1 class="text-2xl font-bold">수학 오답노트</h1>
-    83	                </div>
-    84	                <div class="hidden md:flex space-x-6">
-    85	                    <a href="index.html" class="hover:text-blue-200 transition">
-    86	                        <i class="fas fa-home mr-2"></i>홈
-    87	                    </a>
-    88	                    <a href="register.html" class="hover:text-blue-200 transition">
-    89	                        <i class="fas fa-plus-circle mr-2"></i>오답 등록
-    90	                    </a>
-    91	                    <a href="problems.html" class="hover:text-blue-200 transition">
-    92	                        <i class="fas fa-list mr-2"></i>오답 목록
-    93	                    </a>
-    94	                    <a href="report.html" class="hover:text-blue-200 transition">
-    95	                        <i class="fas fa-chart-bar mr-2"></i>분석 리포트
-    96	                    </a>
-    97	                    <a href="review.html" class="hover:text-blue-200 transition border-b-2 border-white">
-    98	                        <i class="fas fa-redo mr-2"></i>복습하기
-    99	                    </a>
-   100	                </div>
-   101	                <button id="mobileMenuBtn" class="md:hidden">
-   102	                    <i class="fas fa-bars text-2xl"></i>
-   103	                </button>
-   104	            </div>
-   105	        </div>
-   106	    </nav>
-   107	
-   108	    <!-- Main Content -->
-   109	    <main class="container mx-auto px-4 py-8">
-   110	        <!-- Header -->
-   111	        <div class="glass-card rounded-3xl shadow-2xl p-8 mb-8 animate-fade-in">
-   112	            <h2 class="text-4xl font-bold mb-3 gradient-text">
-   113	                <i class="fas fa-redo mr-2"></i>오답 복습하기
-   114	            </h2>
-   115	            <p class="text-gray-600 text-lg">틀린 문제를 다시 풀어보고 실력을 향상시키세요.</p>
-   116	        </div>
-   117	
-   118	        <!-- Review Mode Selection -->
-   119	        <div id="modeSelection" class="glass-card rounded-3xl shadow-2xl p-8 mb-8 animate-fade-in" style="animation-delay: 0.1s;">
-   120	            <h3 class="text-xl font-bold text-gray-800 mb-4">복습 모드 선택</h3>
-   121	            
-   122	            <!-- Student Selection -->
-   123	            <div class="mb-4">
-   124	                <label class="block text-sm font-semibold text-gray-700 mb-2">학생 선택</label>
-   125	                <select id="reviewStudent" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-   126	                    <option value="">학생을 선택하세요</option>
-   127	                    <option value="student1">첫째 아들</option>
-   128	                    <option value="student2">둘째 아들</option>
-   129	                </select>
-   130	            </div>
-   131	
-   132	            <!-- Review Strategy -->
-   133	            <div class="grid md:grid-cols-3 gap-4 mb-4">
-   134	                <button onclick="startReview('priority')" class="p-6 border-2 border-blue-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition text-center">
-   135	                    <i class="fas fa-exclamation-circle text-4xl text-blue-600 mb-3"></i>
-   136	                    <h4 class="font-bold text-gray-800 mb-2">우선순위 복습</h4>
-   137	                    <p class="text-sm text-gray-600">복습이 가장 필요한 문제부터</p>
-   138	                </button>
-   139	
-   140	                <button onclick="startReview('random')" class="p-6 border-2 border-green-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition text-center">
-   141	                    <i class="fas fa-random text-4xl text-green-600 mb-3"></i>
-   142	                    <h4 class="font-bold text-gray-800 mb-2">랜덤 복습</h4>
-   143	                    <p class="text-sm text-gray-600">무작위로 섞어서 풀기</p>
-   144	                </button>
-   145	
-   146	                <button onclick="startReview('difficult')" class="p-6 border-2 border-red-200 rounded-lg hover:border-red-500 hover:bg-red-50 transition text-center">
-   147	                    <i class="fas fa-fire text-4xl text-red-600 mb-3"></i>
-   148	                    <h4 class="font-bold text-gray-800 mb-2">어려운 문제</h4>
-   149	                    <p class="text-sm text-gray-600">난이도 '상' 문제만</p>
-   150	                </button>
-   151	            </div>
-   152	
-   153	            <!-- Custom Filter -->
-   154	            <div class="bg-gray-50 rounded-lg p-4">
-   155	                <h4 class="font-semibold text-gray-800 mb-3">필터 옵션</h4>
-   156	                <div class="grid md:grid-cols-3 gap-4">
-   157	                    <div>
-   158	                        <label class="block text-sm text-gray-700 mb-1">과목/단원</label>
-   159	                        <input type="text" id="reviewSubject" placeholder="예: 방정식" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
-   160	                    </div>
-   161	                    <div>
-   162	                        <label class="block text-sm text-gray-700 mb-1">난이도</label>
-   163	                        <select id="reviewDifficulty" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
-   164	                            <option value="">전체</option>
-   165	                            <option value="상">상</option>
-   166	                            <option value="중">중</option>
-   167	                            <option value="하">하</option>
-   168	                        </select>
-   169	                    </div>
-   170	                    <div>
-   171	                        <label class="block text-sm text-gray-700 mb-1">문제 수</label>
-   172	                        <input type="number" id="reviewCount" value="10" min="1" max="50" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
-   173	                    </div>
-   174	                </div>
-   175	                <button onclick="startReview('custom')" class="mt-6 w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white py-3 rounded-2xl font-bold hover:scale-105 transition shadow-2xl border border-white/20">
-   176	                    <i class="fas fa-play mr-2"></i>맞춤 복습 시작
-   177	                </button>
-   178	            </div>
-   179	        </div>
-   180	
-   181	        <!-- Review Session -->
-   182	        <div id="reviewSession" class="hidden">
-   183	            <!-- Progress Bar -->
-   184	            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
-   185	                <div class="flex items-center justify-between mb-2">
-   186	                    <span class="text-sm font-semibold text-gray-700">진행 상황</span>
-   187	                    <span class="text-sm font-semibold text-gray-700">
-   188	                        <span id="currentProblemNum">0</span> / <span id="totalProblemsNum">0</span>
-   189	                    </span>
-   190	                </div>
-   191	                <div class="w-full bg-gray-200 rounded-full h-3">
-   192	                    <div id="progressBar" class="bg-blue-600 h-3 rounded-full transition-all" style="width: 0%"></div>
-   193	                </div>
-   194	            </div>
-   195	
-   196	            <!-- Problem Card -->
-   197	            <div id="problemCard" class="bg-white rounded-lg shadow-lg p-8 mb-6">
-   198	                <div class="mb-6">
-   199	                    <div class="flex items-center justify-between mb-4">
-   200	                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold" id="problemSubject"></span>
-   201	                        <span class="px-3 py-1 rounded-full text-sm font-semibold" id="problemDifficulty"></span>
-   202	                    </div>
-   203	                    <h3 class="text-xl font-bold text-gray-800 mb-4">문제</h3>
-   204	                    <div id="problemContent" class="text-gray-700 mb-4 whitespace-pre-wrap"></div>
-   205	                    <div id="problemImage" class="hidden mb-4">
-   206	                        <img id="problemImageSrc" class="max-w-full rounded-lg shadow-md">
-   207	                    </div>
-   208	                </div>
-   209	
-   210	                <!-- Answer Input -->
-   211	                <div class="border-t pt-6">
-   212	                    <label class="block text-gray-700 font-semibold mb-2">내 답</label>
-   213	                    <input type="text" id="userAnswer" placeholder="답을 입력하세요..." class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
-   214	                </div>
-   215	
-   216	                <!-- Show Answer Button -->
-   217	                <div class="mt-6">
-   218	                    <button onclick="showAnswer()" id="showAnswerBtn" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-   219	                        <i class="fas fa-eye mr-2"></i>정답 확인
-   220	                    </button>
-   221	                </div>
-   222	
-   223	                <!-- Answer Section (Hidden Initially) -->
-   224	                <div id="answerSection" class="hidden mt-6 border-t pt-6">
-   225	                    <div class="bg-green-50 border-2 border-green-200 rounded-lg p-4 mb-4">
-   226	                        <h4 class="font-bold text-green-800 mb-2">
-   227	                            <i class="fas fa-check-circle mr-2"></i>정답
-   228	                        </h4>
-   229	                        <p class="text-green-700 text-lg" id="correctAnswerText"></p>
-   230	                    </div>
-   231	
-   232	                    <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-4">
-   233	                        <h4 class="font-bold text-yellow-800 mb-2">
-   234	                            <i class="fas fa-lightbulb mr-2"></i>이전에 틀린 이유
-   235	                        </h4>
-   236	                        <p class="text-yellow-700" id="mistakeReasonText"></p>
-   237	                    </div>
-   238	
-   239	                    <!-- Result Selection -->
-   240	                    <div class="mb-4">
-   241	                        <h4 class="font-semibold text-gray-800 mb-3">이번 복습 결과는?</h4>
-   242	                        <div class="grid grid-cols-3 gap-3">
-   243	                            <button onclick="submitReview('정답')" class="py-3 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition">
-   244	                                <i class="fas fa-check mr-2"></i>맞음
-   245	                            </button>
-   246	                            <button onclick="submitReview('부분정답')" class="py-3 bg-yellow-100 text-yellow-700 rounded-lg font-semibold hover:bg-yellow-200 transition">
-   247	                                <i class="fas fa-minus mr-2"></i>부분맞음
-   248	                            </button>
-   249	                            <button onclick="submitReview('오답')" class="py-3 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200 transition">
-   250	                                <i class="fas fa-times mr-2"></i>틀림
-   251	                            </button>
-   252	                        </div>
-   253	                    </div>
-   254	
-   255	                    <!-- Notes -->
-   256	                    <div>
-   257	                        <label class="block text-gray-700 font-semibold mb-2">복습 메모 (선택)</label>
-   258	                        <textarea id="reviewNotes" rows="3" placeholder="이번 복습에서 느낀 점이나 추가 메모..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
-   259	                    </div>
-   260	                </div>
-   261	            </div>
-   262	
-   263	            <!-- Navigation Buttons -->
-   264	            <div class="flex space-x-4">
-   265	                <button onclick="exitReview()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
-   266	                    <i class="fas fa-stop mr-2"></i>복습 종료
-   267	                </button>
-   268	            </div>
-   269	        </div>
-   270	
-   271	        <!-- Review Complete -->
-   272	        <div id="reviewComplete" class="hidden glass-card rounded-3xl shadow-2xl p-12 text-center animate-fade-in">
-   273	            <i class="fas fa-trophy text-6xl text-yellow-500 mb-4"></i>
-   274	            <h3 class="text-3xl font-bold text-gray-800 mb-4">복습 완료!</h3>
-   275	            <p class="text-gray-600 mb-6">수고하셨습니다. 꾸준한 복습으로 실력이 향상될 거예요!</p>
-   276	            
-   277	            <!-- Review Summary -->
-   278	            <div class="grid md:grid-cols-3 gap-4 mb-6">
-   279	                <div class="bg-green-50 rounded-lg p-4">
-   280	                    <p class="text-sm text-gray-600 mb-1">정답</p>
-   281	                    <p class="text-2xl font-bold text-green-700" id="resultCorrect">0</p>
-   282	                </div>
-   283	                <div class="bg-yellow-50 rounded-lg p-4">
-   284	                    <p class="text-sm text-gray-600 mb-1">부분정답</p>
-   285	                    <p class="text-2xl font-bold text-yellow-700" id="resultPartial">0</p>
-   286	                </div>
-   287	                <div class="bg-red-50 rounded-lg p-4">
-   288	                    <p class="text-sm text-gray-600 mb-1">오답</p>
-   289	                    <p class="text-2xl font-bold text-red-700" id="resultWrong">0</p>
-   290	                </div>
-   291	            </div>
-   292	
-   293	            <div class="flex space-x-4">
-   294	                <button onclick="location.reload()" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-   295	                    <i class="fas fa-redo mr-2"></i>다시 복습하기
-   296	                </button>
-   297	                <button onclick="location.href='index.html'" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
-   298	                    <i class="fas fa-home mr-2"></i>홈으로
-   299	                </button>
-   300	            </div>
-   301	        </div>
-   302	    </main>
-   303	
-   304	    <!-- Footer -->
-   305	    <footer class="glass-card-dark text-slate-200 py-8 mt-16 border-t border-white/10">
-   306	        <div class="container mx-auto px-4 text-center">
-   307	            <p>&copy; 2025 수학 오답노트. 체계적인 학습 관리 시스템</p>
-   308	        </div>
-   309	    </footer>
-   310	
-   311	    <script src="js/main.js"></script>
-   312	    <script src="js/review.js"></script>
-   313	</body>
-   314	</html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>복습하기 - 수학 오답 관리 시스템</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(203, 213, 225, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .glass-card-dark {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        .review-card {
+            transition: all 0.3s;
+        }
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="glass-card-dark text-white shadow-2xl sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-calculator text-2xl"></i>
+                    <h1 class="text-2xl font-bold">수학 오답노트</h1>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="hover:text-blue-200 transition">
+                        <i class="fas fa-home mr-2"></i>홈
+                    </a>
+                    <a href="register.html" class="hover:text-blue-200 transition">
+                        <i class="fas fa-plus-circle mr-2"></i>오답 등록
+                    </a>
+                    <a href="problems.html" class="hover:text-blue-200 transition">
+                        <i class="fas fa-list mr-2"></i>오답 목록
+                    </a>
+                    <a href="report.html" class="hover:text-blue-200 transition">
+                        <i class="fas fa-chart-bar mr-2"></i>분석 리포트
+                    </a>
+                    <a href="review.html" class="hover:text-blue-200 transition border-b-2 border-white">
+                        <i class="fas fa-redo mr-2"></i>복습하기
+                    </a>
+                </div>
+                <button id="mobileMenuBtn" class="md:hidden">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="glass-card rounded-3xl shadow-2xl p-8 mb-8 animate-fade-in">
+            <h2 class="text-4xl font-bold mb-3 gradient-text">
+                <i class="fas fa-redo mr-2"></i>오답 복습하기
+            </h2>
+            <p class="text-gray-600 text-lg">틀린 문제를 다시 풀어보고 실력을 향상시키세요.</p>
+        </div>
+
+        <!-- Review Mode Selection -->
+        <div id="modeSelection" class="glass-card rounded-3xl shadow-2xl p-8 mb-8 animate-fade-in" style="animation-delay: 0.1s;">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">복습 모드 선택</h3>
+            
+            <!-- Student Selection -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">학생 선택</label>
+                <select id="reviewStudent" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <option value="">학생을 선택하세요</option>
+                    <option value="student1">첫째 아들</option>
+                    <option value="student2">둘째 아들</option>
+                </select>
+            </div>
+
+            <!-- Review Strategy -->
+            <div class="grid md:grid-cols-3 gap-4 mb-4">
+                <button onclick="startReview('priority')" class="p-6 border-2 border-blue-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition text-center">
+                    <i class="fas fa-exclamation-circle text-4xl text-blue-600 mb-3"></i>
+                    <h4 class="font-bold text-gray-800 mb-2">우선순위 복습</h4>
+                    <p class="text-sm text-gray-600">복습이 가장 필요한 문제부터</p>
+                </button>
+
+                <button onclick="startReview('random')" class="p-6 border-2 border-green-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition text-center">
+                    <i class="fas fa-random text-4xl text-green-600 mb-3"></i>
+                    <h4 class="font-bold text-gray-800 mb-2">랜덤 복습</h4>
+                    <p class="text-sm text-gray-600">무작위로 섞어서 풀기</p>
+                </button>
+
+                <button onclick="startReview('difficult')" class="p-6 border-2 border-red-200 rounded-lg hover:border-red-500 hover:bg-red-50 transition text-center">
+                    <i class="fas fa-fire text-4xl text-red-600 mb-3"></i>
+                    <h4 class="font-bold text-gray-800 mb-2">어려운 문제</h4>
+                    <p class="text-sm text-gray-600">난이도 '상' 문제만</p>
+                </button>
+            </div>
+
+            <!-- Custom Filter -->
+            <div class="bg-gray-50 rounded-lg p-4">
+                <h4 class="font-semibold text-gray-800 mb-3">필터 옵션</h4>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-700 mb-1">과목/단원</label>
+                        <input type="text" id="reviewSubject" placeholder="예: 방정식" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-700 mb-1">난이도</label>
+                        <select id="reviewDifficulty" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                            <option value="">전체</option>
+                            <option value="상">상</option>
+                            <option value="중">중</option>
+                            <option value="하">하</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-700 mb-1">문제 수</label>
+                        <input type="number" id="reviewCount" value="10" min="1" max="50" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                    </div>
+                </div>
+                <button onclick="startReview('custom')" class="mt-6 w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white py-3 rounded-2xl font-bold hover:scale-105 transition shadow-2xl border border-white/20">
+                    <i class="fas fa-play mr-2"></i>맞춤 복습 시작
+                </button>
+            </div>
+        </div>
+
+        <!-- Review Session -->
+        <div id="reviewSession" class="hidden">
+            <!-- Progress Bar -->
+            <div class="glass-card rounded-3xl shadow-2xl p-6 mb-8">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-semibold text-gray-700">진행 상황</span>
+                    <span class="text-sm font-semibold text-gray-700">
+                        <span id="currentProblemNum">0</span> / <span id="totalProblemsNum">0</span>
+                    </span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div id="progressBar" class="bg-blue-600 h-3 rounded-full transition-all" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Problem Card -->
+            <div id="problemCard" class="glass-card rounded-3xl shadow-2xl p-8 mb-6">
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold" id="problemSubject"></span>
+                        <span class="px-3 py-1 rounded-full text-sm font-semibold" id="problemDifficulty"></span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">문제</h3>
+                    <div id="problemContent" class="text-gray-700 mb-4 whitespace-pre-wrap"></div>
+                    <div id="problemImage" class="hidden mb-4">
+                        <img id="problemImageSrc" class="max-w-full rounded-lg shadow-md">
+                    </div>
+                </div>
+
+                <!-- Answer Input -->
+                <div class="border-t pt-6">
+                    <label class="block text-gray-700 font-semibold mb-2">내 답</label>
+                    <input type="text" id="userAnswer" placeholder="답을 입력하세요..." class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
+                </div>
+
+                <!-- Show Answer Button -->
+                <div class="mt-6">
+                    <button onclick="showAnswer()" id="showAnswerBtn" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                        <i class="fas fa-eye mr-2"></i>정답 확인
+                    </button>
+                </div>
+
+                <!-- Answer Section (Hidden Initially) -->
+                <div id="answerSection" class="hidden mt-6 border-t pt-6">
+                    <div class="bg-green-50 border-2 border-green-200 rounded-lg p-4 mb-4">
+                        <h4 class="font-bold text-green-800 mb-2">
+                            <i class="fas fa-check-circle mr-2"></i>정답
+                        </h4>
+                        <p class="text-green-700 text-lg" id="correctAnswerText"></p>
+                    </div>
+
+                    <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-4">
+                        <h4 class="font-bold text-yellow-800 mb-2">
+                            <i class="fas fa-lightbulb mr-2"></i>이전에 틀린 이유
+                        </h4>
+                        <p class="text-yellow-700" id="mistakeReasonText"></p>
+                    </div>
+
+                    <!-- Result Selection -->
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-gray-800 mb-3">이번 복습 결과는?</h4>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button onclick="submitReview('정답')" class="py-3 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition">
+                                <i class="fas fa-check mr-2"></i>맞음
+                            </button>
+                            <button onclick="submitReview('부분정답')" class="py-3 bg-yellow-100 text-yellow-700 rounded-lg font-semibold hover:bg-yellow-200 transition">
+                                <i class="fas fa-minus mr-2"></i>부분맞음
+                            </button>
+                            <button onclick="submitReview('오답')" class="py-3 bg-red-100 text-red-700 rounded-lg font-semibold hover:bg-red-200 transition">
+                                <i class="fas fa-times mr-2"></i>틀림
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">복습 메모 (선택)</label>
+                        <textarea id="reviewNotes" rows="3" placeholder="이번 복습에서 느낀 점이나 추가 메모..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex space-x-4">
+                <button onclick="exitReview()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
+                    <i class="fas fa-stop mr-2"></i>복습 종료
+                </button>
+            </div>
+        </div>
+
+        <!-- Review Complete -->
+        <div id="reviewComplete" class="hidden glass-card rounded-3xl shadow-2xl p-12 text-center animate-fade-in">
+            <i class="fas fa-trophy text-6xl text-yellow-500 mb-4"></i>
+            <h3 class="text-3xl font-bold text-gray-800 mb-4">복습 완료!</h3>
+            <p class="text-gray-600 mb-6">수고하셨습니다. 꾸준한 복습으로 실력이 향상될 거예요!</p>
+            
+            <!-- Review Summary -->
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-green-50 rounded-lg p-4">
+                    <p class="text-sm text-gray-600 mb-1">정답</p>
+                    <p class="text-2xl font-bold text-green-700" id="resultCorrect">0</p>
+                </div>
+                <div class="bg-yellow-50 rounded-lg p-4">
+                    <p class="text-sm text-gray-600 mb-1">부분정답</p>
+                    <p class="text-2xl font-bold text-yellow-700" id="resultPartial">0</p>
+                </div>
+                <div class="bg-red-50 rounded-lg p-4">
+                    <p class="text-sm text-gray-600 mb-1">오답</p>
+                    <p class="text-2xl font-bold text-red-700" id="resultWrong">0</p>
+                </div>
+            </div>
+
+            <div class="flex space-x-4">
+                <button onclick="location.reload()" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                    <i class="fas fa-redo mr-2"></i>다시 복습하기
+                </button>
+                <button onclick="location.href='index.html'" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
+                    <i class="fas fa-home mr-2"></i>홈으로
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-card-dark text-slate-200 py-8 mt-16 border-t border-white/10">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 수학 오답노트. 체계적인 학습 관리 시스템</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/review.js"></script>
+</body>
+</html>
