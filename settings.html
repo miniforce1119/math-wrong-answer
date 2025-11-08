@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+     2	<html lang="ko">
+     3	<head>
+     4	    <meta charset="UTF-8">
+     5	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6	    <title>설정 - 수학 오답 관리 시스템</title>
+     7	    <script src="https://cdn.tailwindcss.com"></script>
+     8	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+     9	    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    10	    <style>
+    11	        body {
+    12	            font-family: 'Noto Sans KR', sans-serif;
+    13	            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    14	            min-height: 100vh;
+    15	        }
+    16	        .glass-card {
+    17	            background: rgba(255, 255, 255, 0.98);
+    18	            backdrop-filter: blur(20px);
+    19	            border: 1px solid rgba(203, 213, 225, 0.5);
+    20	            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    21	        }
+    22	        .glass-card-dark {
+    23	            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(51, 65, 85, 0.95) 100%);
+    24	            backdrop-filter: blur(20px);
+    25	            border: 1px solid rgba(148, 163, 184, 0.2);
+    26	            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    27	        }
+    28	        .hover-lift {
+    29	            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    30	        }
+    31	        .hover-lift:hover {
+    32	            transform: translateY(-4px);
+    33	            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+    34	        }
+    35	        .gradient-text {
+    36	            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+    37	            -webkit-background-clip: text;
+    38	            -webkit-text-fill-color: transparent;
+    39	            background-clip: text;
+    40	        }
+    41	        @keyframes fadeInUp {
+    42	            from {
+    43	                opacity: 0;
+    44	                transform: translateY(30px);
+    45	            }
+    46	            to {
+    47	                opacity: 1;
+    48	                transform: translateY(0);
+    49	            }
+    50	        }
+    51	        .animate-fade-in {
+    52	            animation: fadeInUp 0.8s ease-out;
+    53	        }
+    54	    </style>
+    55	</head>
+    56	<body>
+    57	    <!-- Navigation -->
+    58	    <nav class="glass-card-dark text-white shadow-2xl sticky top-0 z-50">
+    59	        <div class="container mx-auto px-4">
+    60	            <div class="flex items-center justify-between py-4">
+    61	                <div class="flex items-center space-x-2">
+    62	                    <i class="fas fa-calculator text-2xl"></i>
+    63	                    <h1 class="text-2xl font-bold">수학 오답노트</h1>
+    64	                </div>
+    65	                <div class="hidden md:flex space-x-6">
+    66	                    <a href="index.html" class="hover:text-blue-200 transition">
+    67	                        <i class="fas fa-home mr-2"></i>홈
+    68	                    </a>
+    69	                    <a href="register.html" class="hover:text-blue-200 transition">
+    70	                        <i class="fas fa-plus-circle mr-2"></i>오답 등록
+    71	                    </a>
+    72	                    <a href="problems.html" class="hover:text-blue-200 transition">
+    73	                        <i class="fas fa-list mr-2"></i>오답 목록
+    74	                    </a>
+    75	                    <a href="report.html" class="hover:text-blue-200 transition">
+    76	                        <i class="fas fa-chart-bar mr-2"></i>분석 리포트
+    77	                    </a>
+    78	                    <a href="review.html" class="hover:text-blue-200 transition">
+    79	                        <i class="fas fa-redo mr-2"></i>복습하기
+    80	                    </a>
+    81	                    <a href="settings.html" class="hover:text-blue-200 transition border-b-2 border-white">
+    82	                        <i class="fas fa-cog mr-2"></i>설정
+    83	                    </a>
+    84	                </div>
+    85	                <button id="mobileMenuBtn" class="md:hidden">
+    86	                    <i class="fas fa-bars text-2xl"></i>
+    87	                </button>
+    88	            </div>
+    89	        </div>
+    90	    </nav>
+    91	
+    92	    <!-- Main Content -->
+    93	    <main class="container mx-auto px-4 py-8">
+    94	        <div class="max-w-3xl mx-auto">
+    95	            <!-- Header -->
+    96	            <div class="glass-card rounded-3xl shadow-2xl p-8 mb-8 animate-fade-in">
+    97	                <h2 class="text-4xl font-bold mb-3 gradient-text">
+    98	                    <i class="fas fa-cog mr-2"></i>설정
+    99	                </h2>
+   100	                <p class="text-gray-600 text-lg">AI 기능 및 시스템 설정을 관리합니다.</p>
+   101	            </div>
+   102	
+   103	            <!-- API Key Configuration -->
+   104	            <div class="glass-card rounded-3xl shadow-2xl p-8 mb-8 animate-fade-in" style="animation-delay: 0.1s;">
+   105	                <h3 class="text-2xl font-bold mb-6 gradient-text">
+   106	                    <i class="fas fa-key mr-2"></i>OpenAI API 키 설정
+   107	                </h3>
+   108	                
+   109	                <!-- Info Box -->
+   110	                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+   111	                    <div class="flex">
+   112	                        <div class="flex-shrink-0">
+   113	                            <i class="fas fa-info-circle text-blue-500 text-xl"></i>
+   114	                        </div>
+   115	                        <div class="ml-3">
+   116	                            <h4 class="text-sm font-semibold text-blue-800 mb-2">API 키가 필요한 이유</h4>
+   117	                            <p class="text-sm text-blue-700">
+   118	                                AI 어시스턴트 기능을 사용하려면 OpenAI API 키가 필요합니다. 
+   119	                                API 키는 브라우저에만 안전하게 저장되며, 서버로 전송되지 않습니다.
+   120	                            </p>
+   121	                        </div>
+   122	                    </div>
+   123	                </div>
+   124	
+   125	                <!-- API Key Status -->
+   126	                <div id="apiKeyStatus" class="mb-4">
+   127	                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+   128	                        <div>
+   129	                            <p class="text-sm font-semibold text-gray-700">API 키 상태</p>
+   130	                            <p id="keyStatusText" class="text-sm text-gray-600">설정되지 않음</p>
+   131	                        </div>
+   132	                        <div id="keyStatusIcon" class="text-2xl text-gray-400">
+   133	                            <i class="fas fa-times-circle"></i>
+   134	                        </div>
+   135	                    </div>
+   136	                </div>
+   137	
+   138	                <!-- API Key Input -->
+   139	                <div class="mb-4">
+   140	                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+   141	                        API 키
+   142	                    </label>
+   143	                    <div class="flex space-x-2">
+   144	                        <input type="password" id="apiKeyInput" placeholder="sk-..." 
+   145	                               class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+   146	                        <button onclick="toggleApiKeyVisibility()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+   147	                            <i id="eyeIcon" class="fas fa-eye"></i>
+   148	                        </button>
+   149	                    </div>
+   150	                    <p class="text-xs text-gray-500 mt-1">API 키는 브라우저의 로컬 스토리지에만 저장됩니다.</p>
+   151	                </div>
+   152	
+   153	                <!-- Action Buttons -->
+   154	                <div class="flex space-x-3">
+   155	                    <button onclick="saveApiKey()" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-6 rounded-2xl font-bold hover:scale-105 transition shadow-2xl border border-white/20">
+   156	                        <i class="fas fa-save mr-2"></i>저장
+   157	                    </button>
+   158	                    <button onclick="testApiKey()" class="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 px-6 rounded-2xl font-bold hover:scale-105 transition shadow-2xl border border-white/20">
+   159	                        <i class="fas fa-check-circle mr-2"></i>연결 테스트
+   160	                    </button>
+   161	                    <button onclick="deleteApiKey()" class="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-2xl font-bold hover:scale-105 transition shadow-2xl border border-white/20">
+   162	                        <i class="fas fa-trash"></i>
+   163	                    </button>
+   164	                </div>
+   165	
+   166	                <!-- Test Result -->
+   167	                <div id="testResult" class="mt-4 hidden">
+   168	                    <!-- Test result will be shown here -->
+   169	                </div>
+   170	            </div>
+   171	
+   172	            <!-- How to Get API Key -->
+   173	            <div class="glass-card rounded-3xl shadow-2xl p-8 mb-8 animate-fade-in" style="animation-delay: 0.2s;">
+   174	                <h3 class="text-xl font-bold text-gray-800 mb-4">
+   175	                    <i class="fas fa-question-circle text-green-600 mr-2"></i>API 키 발급 방법
+   176	                </h3>
+   177	                <ol class="list-decimal list-inside space-y-3 text-gray-700">
+   178	                    <li>
+   179	                        <a href="https://platform.openai.com/signup" target="_blank" class="text-blue-600 hover:underline">
+   180	                            OpenAI 계정 생성 <i class="fas fa-external-link-alt text-xs"></i>
+   181	                        </a>
+   182	                    </li>
+   183	                    <li>
+   184	                        <a href="https://platform.openai.com/api-keys" target="_blank" class="text-blue-600 hover:underline">
+   185	                            API Keys 페이지 방문 <i class="fas fa-external-link-alt text-xs"></i>
+   186	                        </a>
+   187	                    </li>
+   188	                    <li>"Create new secret key" 버튼 클릭</li>
+   189	                    <li>생성된 API 키를 복사하여 위 입력창에 붙여넣기</li>
+   190	                    <li>"저장" 버튼 클릭</li>
+   191	                </ol>
+   192	                
+   193	                <div class="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-500">
+   194	                    <p class="text-sm text-yellow-800">
+   195	                        <i class="fas fa-exclamation-triangle mr-2"></i>
+   196	                        <strong>예상 비용:</strong> 이미지 분석 1회당 약 $0.01~0.05 정도 소요됩니다. 
+   197	                        한 달에 100개 문제를 분석해도 $5 미만의 비용이 발생합니다.
+   198	                    </p>
+   199	                </div>
+   200	            </div>
+   201	
+   202	            <!-- AI Settings -->
+   203	            <div class="glass-card rounded-3xl shadow-2xl p-8 mb-8 animate-fade-in" style="animation-delay: 0.3s;">
+   204	                <h3 class="text-xl font-bold text-gray-800 mb-4">
+   205	                    <i class="fas fa-sliders-h text-indigo-600 mr-2"></i>AI 설정
+   206	                </h3>
+   207	                
+   208	                <div class="space-y-4">
+   209	                    <!-- Model Selection -->
+   210	                    <div>
+   211	                        <label class="block text-sm font-semibold text-gray-700 mb-2">AI 모델</label>
+   212	                        <select id="aiModel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+   213	                            <option value="gpt-4o">GPT-4o (추천 - 이미지 분석 가능)</option>
+   214	                            <option value="gpt-4o-mini">GPT-4o Mini (저렴한 옵션)</option>
+   215	                            <option value="gpt-4-turbo">GPT-4 Turbo (고성능)</option>
+   216	                        </select>
+   217	                        <p class="text-xs text-gray-500 mt-1">GPT-4o는 이미지 분석이 가능하며 비용 대비 성능이 가장 좋습니다.</p>
+   218	                    </div>
+   219	
+   220	                    <!-- Auto Save -->
+   221	                    <div class="flex items-center justify-between">
+   222	                        <div>
+   223	                            <p class="font-semibold text-gray-700">AI 분석 후 자동 저장</p>
+   224	                            <p class="text-sm text-gray-500">AI가 분석한 내용을 자동으로 DB에 저장합니다.</p>
+   225	                        </div>
+   226	                        <label class="relative inline-flex items-center cursor-pointer">
+   227	                            <input type="checkbox" id="autoSave" class="sr-only peer" checked>
+   228	                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+   229	                        </label>
+   230	                    </div>
+   231	
+   232	                    <!-- Language -->
+   233	                    <div>
+   234	                        <label class="block text-sm font-semibold text-gray-700 mb-2">응답 언어</label>
+   235	                        <select id="aiLanguage" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+   236	                            <option value="ko">한국어</option>
+   237	                            <option value="en">English</option>
+   238	                        </select>
+   239	                    </div>
+   240	                </div>
+   241	
+   242	                <button onclick="saveAISettings()" class="mt-4 w-full bg-indigo-600 text-white py-2 px-6 rounded-lg font-semibold hover:bg-indigo-700 transition">
+   243	                    <i class="fas fa-save mr-2"></i>AI 설정 저장
+   244	                </button>
+   245	            </div>
+   246	
+   247	            <!-- Data Management -->
+   248	            <div class="glass-card rounded-3xl shadow-2xl p-8 animate-fade-in" style="animation-delay: 0.4s;">
+   249	                <h3 class="text-xl font-bold text-gray-800 mb-4">
+   250	                    <i class="fas fa-database text-red-600 mr-2"></i>데이터 관리
+   251	                </h3>
+   252	                
+   253	                <div class="space-y-3">
+   254	                    <button onclick="exportData()" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition text-left">
+   255	                        <i class="fas fa-download mr-2"></i>데이터 내보내기 (백업)
+   256	                    </button>
+   257	                    <button onclick="importData()" class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition text-left">
+   258	                        <i class="fas fa-upload mr-2"></i>데이터 가져오기 (복원)
+   259	                    </button>
+   260	                    <button onclick="clearAllData()" class="w-full bg-red-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-700 transition text-left">
+   261	                        <i class="fas fa-trash-alt mr-2"></i>모든 데이터 삭제 (주의!)
+   262	                    </button>
+   263	                </div>
+   264	            </div>
+   265	        </div>
+   266	    </main>
+   267	
+   268	    <!-- Footer -->
+   269	    <footer class="glass-card-dark text-slate-200 py-8 mt-16 border-t border-white/10">
+   270	        <div class="container mx-auto px-4 text-center">
+   271	            <p>&copy; 2025 수학 오답노트. 체계적인 학습 관리 시스템</p>
+   272	        </div>
+   273	    </footer>
+   274	
+   275	    <script src="js/main.js"></script>
+   276	    <script src="js/settings.js"></script>
+   277	</body>
+   278	</html>

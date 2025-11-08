@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+     2	<html lang="ko">
+     3	<head>
+     4	    <meta charset="UTF-8">
+     5	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6	    <title>오답 목록 - 수학 오답 관리 시스템</title>
+     7	    <script src="https://cdn.tailwindcss.com"></script>
+     8	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+     9	    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    10	    <style>
+    11	        body {
+    12	            font-family: 'Noto Sans KR', sans-serif;
+    13	        }
+    14	        .problem-card {
+    15	            transition: transform 0.2s;
+    16	        }
+    17	        .problem-card:hover {
+    18	            transform: translateY(-2px);
+    19	        }
+    20	    </style>
+    21	</head>
+    22	<body class="bg-gray-50">
+    23	    <!-- Navigation -->
+    24	    <nav class="bg-blue-600 text-white shadow-lg">
+    25	        <div class="container mx-auto px-4">
+    26	            <div class="flex items-center justify-between py-4">
+    27	                <div class="flex items-center space-x-2">
+    28	                    <i class="fas fa-calculator text-2xl"></i>
+    29	                    <h1 class="text-2xl font-bold">수학 오답노트</h1>
+    30	                </div>
+    31	                <div class="hidden md:flex space-x-6">
+    32	                    <a href="index.html" class="hover:text-blue-200 transition">
+    33	                        <i class="fas fa-home mr-2"></i>홈
+    34	                    </a>
+    35	                    <a href="register.html" class="hover:text-blue-200 transition">
+    36	                        <i class="fas fa-plus-circle mr-2"></i>오답 등록
+    37	                    </a>
+    38	                    <a href="problems.html" class="hover:text-blue-200 transition border-b-2 border-white">
+    39	                        <i class="fas fa-list mr-2"></i>오답 목록
+    40	                    </a>
+    41	                    <a href="report.html" class="hover:text-blue-200 transition">
+    42	                        <i class="fas fa-chart-bar mr-2"></i>분석 리포트
+    43	                    </a>
+    44	                    <a href="review.html" class="hover:text-blue-200 transition">
+    45	                        <i class="fas fa-redo mr-2"></i>복습하기
+    46	                    </a>
+    47	                </div>
+    48	                <button id="mobileMenuBtn" class="md:hidden">
+    49	                    <i class="fas fa-bars text-2xl"></i>
+    50	                </button>
+    51	            </div>
+    52	        </div>
+    53	    </nav>
+    54	
+    55	    <!-- Main Content -->
+    56	    <main class="container mx-auto px-4 py-8">
+    57	        <!-- Header -->
+    58	        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    59	            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+    60	                <i class="fas fa-list text-blue-600 mr-2"></i>오답 문제 목록
+    61	            </h2>
+    62	            <p class="text-gray-600">등록된 모든 오답 문제를 확인하고 관리하세요.</p>
+    63	        </div>
+    64	
+    65	        <!-- Filters and Search -->
+    66	        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    67	            <div class="grid md:grid-cols-4 gap-4">
+    68	                <!-- Student Filter -->
+    69	                <div>
+    70	                    <label class="block text-sm font-semibold text-gray-700 mb-2">학생</label>
+    71	                    <select id="filterStudent" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+    72	                        <option value="">전체</option>
+    73	                        <option value="student1">첫째 아들</option>
+    74	                        <option value="student2">둘째 아들</option>
+    75	                    </select>
+    76	                </div>
+    77	
+    78	                <!-- Difficulty Filter -->
+    79	                <div>
+    80	                    <label class="block text-sm font-semibold text-gray-700 mb-2">난이도</label>
+    81	                    <select id="filterDifficulty" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+    82	                        <option value="">전체</option>
+    83	                        <option value="상">상</option>
+    84	                        <option value="중">중</option>
+    85	                        <option value="하">하</option>
+    86	                    </select>
+    87	                </div>
+    88	
+    89	                <!-- Mastery Filter -->
+    90	                <div>
+    91	                    <label class="block text-sm font-semibold text-gray-700 mb-2">마스터 상태</label>
+    92	                    <select id="filterMastered" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+    93	                        <option value="">전체</option>
+    94	                        <option value="false">학습 중</option>
+    95	                        <option value="true">완전 이해</option>
+    96	                    </select>
+    97	                </div>
+    98	
+    99	                <!-- Sort -->
+   100	                <div>
+   101	                    <label class="block text-sm font-semibold text-gray-700 mb-2">정렬</label>
+   102	                    <select id="sortBy" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+   103	                        <option value="-registered_date">최근 등록순</option>
+   104	                        <option value="-solved_date">풀이 날짜순</option>
+   105	                        <option value="difficulty">난이도순</option>
+   106	                        <option value="-review_count">복습 많은순</option>
+   107	                    </select>
+   108	                </div>
+   109	            </div>
+   110	
+   111	            <!-- Search Bar -->
+   112	            <div class="mt-4">
+   113	                <div class="relative">
+   114	                    <input type="text" id="searchInput" placeholder="과목, 문제 유형, 태그로 검색..." class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+   115	                    <i class="fas fa-search absolute left-4 top-4 text-gray-400"></i>
+   116	                </div>
+   117	            </div>
+   118	
+   119	            <!-- Filter Button -->
+   120	            <div class="mt-4">
+   121	                <button onclick="applyFilters()" class="w-full bg-blue-600 text-white py-2 px-6 rounded-lg font-semibold hover:bg-blue-700 transition">
+   122	                    <i class="fas fa-filter mr-2"></i>필터 적용
+   123	                </button>
+   124	            </div>
+   125	        </div>
+   126	
+   127	        <!-- Statistics Summary -->
+   128	        <div class="grid md:grid-cols-4 gap-6 mb-8">
+   129	            <div class="glass-card rounded-2xl shadow-lg p-6 hover-lift">
+   130	                <div class="flex items-center justify-between">
+   131	                    <div>
+   132	                        <p class="text-sm text-gray-600">전체 오답</p>
+   133	                        <p class="text-2xl font-bold text-gray-800" id="totalCount">0</p>
+   134	                    </div>
+   135	                    <i class="fas fa-clipboard-list text-3xl text-blue-500"></i>
+   136	                </div>
+   137	            </div>
+   138	            <div class="glass-card rounded-2xl shadow-lg p-6 hover-lift">
+   139	                <div class="flex items-center justify-between">
+   140	                    <div>
+   141	                        <p class="text-sm text-gray-600">이번 달</p>
+   142	                        <p class="text-2xl font-bold text-gray-800" id="monthCount">0</p>
+   143	                    </div>
+   144	                    <i class="fas fa-calendar-alt text-3xl text-green-500"></i>
+   145	                </div>
+   146	            </div>
+   147	            <div class="glass-card rounded-2xl shadow-lg p-6 hover-lift">
+   148	                <div class="flex items-center justify-between">
+   149	                    <div>
+   150	                        <p class="text-sm text-gray-600">복습 필요</p>
+   151	                        <p class="text-2xl font-bold text-gray-800" id="needReviewCount">0</p>
+   152	                    </div>
+   153	                    <i class="fas fa-exclamation-triangle text-3xl text-yellow-500"></i>
+   154	                </div>
+   155	            </div>
+   156	            <div class="glass-card rounded-2xl shadow-lg p-6 hover-lift">
+   157	                <div class="flex items-center justify-between">
+   158	                    <div>
+   159	                        <p class="text-sm text-gray-600">완전 이해</p>
+   160	                        <p class="text-2xl font-bold text-gray-800" id="masteredCount">0</p>
+   161	                    </div>
+   162	                    <i class="fas fa-check-circle text-3xl text-purple-500"></i>
+   163	                </div>
+   164	            </div>
+   165	        </div>
+   166	
+   167	        <!-- Problems List -->
+   168	        <div id="problemsList" class="space-y-4">
+   169	            <!-- Problems will be loaded here -->
+   170	            <div class="text-center py-12 bg-white rounded-lg shadow-md">
+   171	                <i class="fas fa-spinner fa-spin text-4xl text-gray-400 mb-4"></i>
+   172	                <p class="text-gray-600">문제를 불러오는 중...</p>
+   173	            </div>
+   174	        </div>
+   175	
+   176	        <!-- Pagination -->
+   177	        <div id="pagination" class="mt-6 flex justify-center space-x-2">
+   178	            <!-- Pagination will be loaded here -->
+   179	        </div>
+   180	    </main>
+   181	
+   182	    <!-- Problem Detail Modal -->
+   183	    <div id="problemModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+   184	        <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+   185	            <div class="p-6">
+   186	                <div class="flex items-center justify-between mb-4">
+   187	                    <h3 class="text-2xl font-bold text-gray-800">오답 상세 정보</h3>
+   188	                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+   189	                        <i class="fas fa-times text-2xl"></i>
+   190	                    </button>
+   191	                </div>
+   192	                <div id="modalContent">
+   193	                    <!-- Modal content will be loaded here -->
+   194	                </div>
+   195	            </div>
+   196	        </div>
+   197	    </div>
+   198	
+   199	    <!-- Footer -->
+   200	    <footer class="bg-gray-800 text-white py-6 mt-12">
+   201	        <div class="container mx-auto px-4 text-center">
+   202	            <p>&copy; 2025 수학 오답노트. 체계적인 학습 관리 시스템</p>
+   203	        </div>
+   204	    </footer>
+   205	
+   206	    <script src="js/main.js"></script>
+   207	    <script src="js/problems.js"></script>
+   208	</body>
+   209	</html>
