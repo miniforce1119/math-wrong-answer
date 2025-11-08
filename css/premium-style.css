@@ -1,0 +1,226 @@
+/* Premium Design System */
+     2	
+     3	:root {
+     4	    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+     5	    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+     6	    --glass-bg: rgba(255, 255, 255, 0.95);
+     7	    --glass-border: rgba(255, 255, 255, 0.3);
+     8	    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+     9	    --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.1);
+    10	    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.15);
+    11	    --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.2);
+    12	}
+    13	
+    14	body {
+    15	    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    16	    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    17	    min-height: 100vh;
+    18	    background-attachment: fixed;
+    19	}
+    20	
+    21	/* Glass Morphism Effects */
+    22	.glass-card {
+    23	    background: var(--glass-bg);
+    24	    backdrop-filter: blur(10px);
+    25	    -webkit-backdrop-filter: blur(10px);
+    26	    border: 1px solid var(--glass-border);
+    27	    box-shadow: var(--shadow-md);
+    28	}
+    29	
+    30	.glass-card-dark {
+    31	    background: rgba(255, 255, 255, 0.1);
+    32	    backdrop-filter: blur(10px);
+    33	    -webkit-backdrop-filter: blur(10px);
+    34	    border: 1px solid rgba(255, 255, 255, 0.2);
+    35	}
+    36	
+    37	/* Hover Effects */
+    38	.hover-lift {
+    39	    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    40	}
+    41	
+    42	.hover-lift:hover {
+    43	    transform: translateY(-4px);
+    44	    box-shadow: var(--shadow-lg);
+    45	}
+    46	
+    47	.hover-scale {
+    48	    transition: transform 0.3s ease;
+    49	}
+    50	
+    51	.hover-scale:hover {
+    52	    transform: scale(1.05);
+    53	}
+    54	
+    55	/* Gradient Text */
+    56	.gradient-text {
+    57	    background: var(--primary-gradient);
+    58	    -webkit-background-clip: text;
+    59	    -webkit-text-fill-color: transparent;
+    60	    background-clip: text;
+    61	}
+    62	
+    63	.gradient-text-secondary {
+    64	    background: var(--secondary-gradient);
+    65	    -webkit-background-clip: text;
+    66	    -webkit-text-fill-color: transparent;
+    67	    background-clip: text;
+    68	}
+    69	
+    70	/* Animations */
+    71	@keyframes fadeInUp {
+    72	    from {
+    73	        opacity: 0;
+    74	        transform: translateY(20px);
+    75	    }
+    76	    to {
+    77	        opacity: 1;
+    78	        transform: translateY(0);
+    79	    }
+    80	}
+    81	
+    82	@keyframes slideInRight {
+    83	    from {
+    84	        opacity: 0;
+    85	        transform: translateX(20px);
+    86	    }
+    87	    to {
+    88	        opacity: 1;
+    89	        transform: translateX(0);
+    90	    }
+    91	}
+    92	
+    93	@keyframes shimmer {
+    94	    0% {
+    95	        background-position: -1000px 0;
+    96	    }
+    97	    100% {
+    98	        background-position: 1000px 0;
+    99	    }
+   100	}
+   101	
+   102	.animate-fade-in {
+   103	    animation: fadeInUp 0.6s ease-out;
+   104	}
+   105	
+   106	.animate-slide-in {
+   107	    animation: slideInRight 0.6s ease-out;
+   108	}
+   109	
+   110	/* Premium Buttons */
+   111	.btn-premium {
+   112	    background: var(--primary-gradient);
+   113	    color: white;
+   114	    padding: 0.75rem 2rem;
+   115	    border-radius: 0.75rem;
+   116	    font-weight: 600;
+   117	    box-shadow: var(--shadow-md);
+   118	    transition: all 0.3s ease;
+   119	    border: none;
+   120	    cursor: pointer;
+   121	}
+   122	
+   123	.btn-premium:hover {
+   124	    transform: translateY(-2px);
+   125	    box-shadow: var(--shadow-lg);
+   126	}
+   127	
+   128	.btn-premium:active {
+   129	    transform: translateY(0);
+   130	}
+   131	
+   132	/* Premium Input Fields */
+   133	.input-premium {
+   134	    background: rgba(255, 255, 255, 0.9);
+   135	    border: 2px solid rgba(102, 126, 234, 0.2);
+   136	    border-radius: 0.75rem;
+   137	    padding: 0.75rem 1rem;
+   138	    transition: all 0.3s ease;
+   139	}
+   140	
+   141	.input-premium:focus {
+   142	    outline: none;
+   143	    border-color: #667eea;
+   144	    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+   145	    background: white;
+   146	}
+   147	
+   148	/* Premium Cards */
+   149	.card-premium {
+   150	    background: var(--glass-bg);
+   151	    backdrop-filter: blur(10px);
+   152	    border-radius: 1.5rem;
+   153	    padding: 2rem;
+   154	    border: 1px solid var(--glass-border);
+   155	    box-shadow: var(--shadow-md);
+   156	    transition: all 0.3s ease;
+   157	}
+   158	
+   159	.card-premium:hover {
+   160	    transform: translateY(-4px);
+   161	    box-shadow: var(--shadow-lg);
+   162	}
+   163	
+   164	/* Premium Badges */
+   165	.badge-premium {
+   166	    background: var(--primary-gradient);
+   167	    color: white;
+   168	    padding: 0.375rem 1rem;
+   169	    border-radius: 9999px;
+   170	    font-size: 0.875rem;
+   171	    font-weight: 600;
+   172	    display: inline-block;
+   173	}
+   174	
+   175	.badge-outline {
+   176	    background: transparent;
+   177	    border: 2px solid;
+   178	    border-image: var(--primary-gradient) 1;
+   179	    padding: 0.375rem 1rem;
+   180	    border-radius: 9999px;
+   181	    font-size: 0.875rem;
+   182	    font-weight: 600;
+   183	}
+   184	
+   185	/* Loading Shimmer Effect */
+   186	.shimmer {
+   187	    background: linear-gradient(
+   188	        90deg,
+   189	        rgba(255, 255, 255, 0) 0%,
+   190	        rgba(255, 255, 255, 0.3) 50%,
+   191	        rgba(255, 255, 255, 0) 100%
+   192	    );
+   193	    background-size: 1000px 100%;
+   194	    animation: shimmer 2s infinite;
+   195	}
+   196	
+   197	/* Scrollbar Styling */
+   198	::-webkit-scrollbar {
+   199	    width: 10px;
+   200	    height: 10px;
+   201	}
+   202	
+   203	::-webkit-scrollbar-track {
+   204	    background: rgba(255, 255, 255, 0.1);
+   205	    border-radius: 10px;
+   206	}
+   207	
+   208	::-webkit-scrollbar-thumb {
+   209	    background: var(--primary-gradient);
+   210	    border-radius: 10px;
+   211	}
+   212	
+   213	::-webkit-scrollbar-thumb:hover {
+   214	    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+   215	}
+   216	
+   217	/* Responsive adjustments */
+   218	@media (max-width: 768px) {
+   219	    .glass-card, .card-premium {
+   220	        padding: 1.5rem;
+   221	    }
+   222	    
+   223	    .btn-premium {
+   224	        padding: 0.625rem 1.5rem;
+   225	    }
+   226	}
